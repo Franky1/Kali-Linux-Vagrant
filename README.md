@@ -22,3 +22,14 @@ $ vagrant up
 ```shell
 $ vagrant ssh
 ```
+
+## ToDo
+
+- Name vergeben
+- CPUs vergeben
+- RAM vergeben
+- Playbook erstellen
+  - apt update, upgrade, dist-upgrade
+  - Treiber installieren
+  - zusätzliche Pakete?
+    - crowbar
