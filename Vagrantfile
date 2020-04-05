@@ -5,10 +5,10 @@ Vagrant.configure("2") do |config|
   config.vm.box = "kalilinux/rolling"
 
   # Create a forwarded port
-  config.vm.network "forwarded_port", guest: 80, host: 8080
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
 
   # Create a private network. In VirtualBox, this is a Host-Only network
-  config.vm.network "private_network", ip: "192.168.33.10"
+  # config.vm.network "private_network", ip: "192.168.33.10"
 
   # VirtualBox specific settings
   config.vm.provider "virtualbox" do |vb|
