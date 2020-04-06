@@ -14,13 +14,6 @@ Vagrantfile and Ansible Playbook for Kali Linux
 
 ## First run
 
-```shell
-$ vagrant init kalilinux/rolling
-```
-
-A `Vagrantfile` has been placed in this directory.
-You are now ready to `vagrant up` your first virtual environment!
-
 Please read the comments in the Vagrantfile as well as documentation on
 `vagrantup.com` for more information on using Vagrant.
 
@@ -32,14 +25,13 @@ $ vagrant up
 $ vagrant ssh
 ```
 
+```shell
+$ vagrant provision
+```
+
 ## ToDo
 
-- Name vergeben
-- CPUs vergeben
-- RAM vergeben
 - Playbook erstellen
-  - apt update, upgrade, dist-upgrade
+  - apt update, upgrade, dist-upgrade, remove
   - Treiber installieren
   - zusätzliche Pakete?
-    - crowbar
-    - siehe Links
