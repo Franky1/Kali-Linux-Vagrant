@@ -1,31 +1,38 @@
 ---
-tasks:
+- hosts: all
+  remote_user: kali
+  become_user: kali
+  become_method: sudo
+  become: true
 
-- name: Update apt cache
-  apt:
-    update_cache: yes
-    
-- name: Update all packages
-  apt:
-    upgrade: yes
-    
-- name: Update all packages to the latest version
-  apt:
-    upgrade: dist
+  tasks:
 
-- name: Install missing packages
-  apt:
-    pkg:
-      - zsh
-      - htop
-      - realtek-rtl88xxau-dkms
-    state: latest
+  - name: Update apt cache
+    become: yes
+    become_user: root
+    apt:
+      update_cache: yes
 
-- name: Remove useless packages from the cache
-  apt:
-    autoclean: yes
+  - name: Update all packages
+    apt:
+      upgrade: yes
 
-- name: Remove dependencies that are no longer required
-  apt:
-    autoremove: yes
+  - name: Update all packages to the latest version
+    apt:
+      upgrade: dist
 
+  - name: Install missing packages
+    apt:
+      pkg:
+        - zsh
+        - htop
+        - realtek-rtl88xxau-dkms
+      state: latest
+
+  - name: Remove useless packages from the cache
+    apt:
+      autoclean: yes
+
+  - name: Remove dependencies that are no longer required
+    apt:
+      autoremove: yes

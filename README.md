@@ -2,6 +2,10 @@
 
 Vagrantfile and Ansible Playbook for Kali Linux
 
+## Tipps
+
+Default user is `vagrant` and password is `vagrant`.
+
 ## Links
 
 - <https://www.kali.org/news/announcing-kali-for-vagrant/>
@@ -14,19 +18,28 @@ Vagrantfile and Ansible Playbook for Kali Linux
 
 ## First run
 
-Please read the comments in the Vagrantfile as well as documentation on
-`vagrantup.com` for more information on using Vagrant.
+Please read the comments in the Vagrantfile as well as documentation on `vagrantup.com` for more information on using Vagrant.
 
 ```shell
-$ vagrant up
+vagrant validate
 ```
 
 ```shell
-$ vagrant ssh
+vagrant up
 ```
 
 ```shell
-$ vagrant provision
+vagrant ssh
+```
+
+```shell
+vagrant halt
+vagrant destroy
+```
+
+```shell
+vagrant reload
+vagrant provision
 ```
 
 ## ToDo
@@ -35,3 +48,14 @@ $ vagrant provision
   - apt update, upgrade, dist-upgrade, remove
   - Treiber installieren
   - zusätzliche Pakete?
+
+## Probleme
+
+Playbook funktioniert so nicht wegen fehlendem `kali` root user!?
+
+```shell
+cat /etc/passwd | grep kali
+```
+
+- <https://www.kali.org/docs/introduction/default-credentials/>
+- <https://stackoverflow.com/questions/47873671/becoming-non-root-user-in-ansible-fails>
