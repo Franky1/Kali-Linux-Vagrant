@@ -5,6 +5,11 @@ Vagrant.configure("2") do |config|
     config.vm.box = "kalilinux/rolling"
     config.vm.box_check_update = true
 
+    # check if guest addition needs update
+    if Vagrant.has_plugin?("vagrant-vbguest") then
+        config.vbguest.auto_update = false
+    end
+
     # Create a forwarded port
     # config.vm.network "forwarded_port", guest: 80, host: 8080
 
@@ -18,12 +23,12 @@ Vagrant.configure("2") do |config|
         # Hide/show the VirtualBox GUI when booting the machine
         vb.gui = true
 
-        # Customize the amount of memory on the VM:
+        # Customize the amount of memory 4/8GB on the VM:
+        # vb.memory = "8192"
         vb.memory = "4096"
 
-        # use max of 70% cpu
-        vb.customize ["modifyvm", :id, "--cpuexecutioncap", "70"]
-
+        # use max of 80% cpu
+        vb.customize ["modifyvm", :id, "--cpuexecutioncap", "80"]
     end
 
     # Provision the machine with a shell script
@@ -33,8 +38,11 @@ Vagrant.configure("2") do |config|
     # SHELL
 
     config.vm.provision "ansible_local" do |ansible|
+        # set compatibility mode to 2.0 to disable warnings
+        ansible.compatibility_mode = "2.0"
         ansible.playbook = "playbook.yml"
-        ansible.verbose = true
+        # ansible.verbose = true
+        ansible.verbose = false
         ansible.install = true
         ansible.limit = "all"
         ansible.become = true

@@ -1,33 +1,70 @@
 ---
 - hosts: all
-  remote_user: kali
-  become_user: kali
-  become_method: sudo
-  become: true
+  remote_user: vagrant
+  become_user: root
+  become: yes
+  vars:
+    config_system_locale: 'de_DE.UTF-8'
+    config_system_timezone: 'Europe/Berlin'
+    config_keyboard_layout: 'de'
 
   tasks:
 
   - name: Update apt cache
-    become: yes
-    become_user: root
     apt:
       update_cache: yes
+      cache_valid_time: 86400  # One day in seconds
 
   - name: Update all packages
     apt:
-      upgrade: yes
+      upgrade: safe
+      cache_valid_time: 86400  # One day in seconds
 
   - name: Update all packages to the latest version
     apt:
       upgrade: dist
+      cache_valid_time: 86400  # One day in seconds
 
   - name: Install missing packages
     apt:
       pkg:
         - zsh
         - htop
+        - git
         - realtek-rtl88xxau-dkms
       state: latest
+
+  - name: Ensure the locale {{ config_system_locale }} exists
+    locale_gen:
+      name: {{ config_system_locale }}
+      state: present
+
+  - name: Get current locale and language configuration
+    command: localectl status
+    register: locale_status
+    changed_when: false
+
+  - debug:
+      var: locale_status.stdout_lines
+
+  - name: Parse 'LANG' from current locale and language configuration
+    set_fact:
+      locale_lang: "{{ locale_status.stdout | regex_search('LANG=([^\n]+)', '\\1') | first }}"
+
+  - name: Set {{ config_system_locale }} as default locale
+    command: localectl set-locale LANG={{ config_system_locale }} LANGUAGE={{ config_system_locale }}
+    when: locale_lang != config_system_locale
+
+  - name: Set timezone to {{ config_system_timezone }}
+    timezone:
+      name: {{ config_system_timezone }}
+
+  - name: Change keyboard layout in /etc/default/keyboard to {{ config_keyboard_layout }}
+    lineinfile:
+      path: /etc/default/keyboard
+      regexp: '^XKBLAYOUT="us"'
+      line: XKBLAYOUT="{{ config_keyboard_layout }}"
+      backup: yes
 
   - name: Remove useless packages from the cache
     apt:
@@ -36,3 +73,6 @@
   - name: Remove dependencies that are no longer required
     apt:
       autoremove: yes
+
+  # - name: Unconditionally reboot the machine with all defaults
+  #   reboot:
