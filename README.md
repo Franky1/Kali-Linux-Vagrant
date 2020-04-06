@@ -59,3 +59,12 @@ cat /etc/passwd | grep kali
 
 - <https://www.kali.org/docs/introduction/default-credentials/>
 - <https://stackoverflow.com/questions/47873671/becoming-non-root-user-in-ansible-fails>
+
+## Ansible
+
+Tipps and Tricks for Ansible.
+
+### User
+
+- <https://stackoverflow.com/questions/19292899/creating-a-new-user-and-password-with-ansible>
+
