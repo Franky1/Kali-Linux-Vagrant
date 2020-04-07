@@ -18,17 +18,19 @@ Vagrant.configure("2") do |config|
 
     # VirtualBox specific settings
     config.vm.provider "virtualbox" do |vb|
+        # friendly name of the virtual machine
         vb.name = "Kali Linux"
 
         # Hide/show the VirtualBox GUI when booting the machine
         vb.gui = true
 
-        # Customize the amount of memory 4/8GB on the VM:
-        # vb.memory = "8192"
+        # Customize the amount of memory 4GB on the VM:
         vb.memory = "4096"
 
         # use max of 80% cpu
         vb.customize ["modifyvm", :id, "--cpuexecutioncap", "80"]
+        # enable USB
+        vb.customize ["modifyvm", :id, "--usb", "on"]
     end
 
     # Provision the machine with a shell script
@@ -38,7 +40,7 @@ Vagrant.configure("2") do |config|
     # SHELL
 
     config.vm.provision "ansible_local" do |ansible|
-        # set compatibility mode to 2.0 to disable warnings
+        # set compatibility mode to 2.0 to disable warnings:
         ansible.compatibility_mode = "2.0"
         ansible.playbook = "playbook.yml"
         # ansible.verbose = true
@@ -46,6 +48,7 @@ Vagrant.configure("2") do |config|
         ansible.install = true
         ansible.limit = "all"
         ansible.become = true
+        ansible.raw_arguments = [ '-e', 'ansible_python_interpreter=/usr/bin/python' ]
         # ansible.become_user = "kali"
         # ansible.config_file = "ansible.cfg"
         # ansible.galaxy_role_file = "requirements.yml"

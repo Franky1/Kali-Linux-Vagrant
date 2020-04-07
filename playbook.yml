@@ -36,7 +36,7 @@
 
   - name: Ensure the locale {{ config_system_locale }} exists
     locale_gen:
-      name: {{ config_system_locale }}
+      name: "{{ config_system_locale }}"
       state: present
 
   - name: Get current locale and language configuration
@@ -57,14 +57,13 @@
 
   - name: Set timezone to {{ config_system_timezone }}
     timezone:
-      name: {{ config_system_timezone }}
+      name: "{{ config_system_timezone }}"
 
   - name: Change keyboard layout in /etc/default/keyboard to {{ config_keyboard_layout }}
     lineinfile:
       path: /etc/default/keyboard
       regexp: '^XKBLAYOUT="us"'
       line: XKBLAYOUT="{{ config_keyboard_layout }}"
-      backup: yes
 
   - name: Remove useless packages from the cache
     apt:
@@ -73,6 +72,3 @@
   - name: Remove dependencies that are no longer required
     apt:
       autoremove: yes
-
-  # - name: Unconditionally reboot the machine with all defaults
-  #   reboot:
