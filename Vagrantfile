@@ -4,6 +4,7 @@
 Vagrant.configure("2") do |config|
     config.vm.box = "kalilinux/rolling"
     config.vm.box_check_update = true
+    config.vm.synced_folder ".", "/vagrant"
 
     # check if guest addition needs update
     if Vagrant.has_plugin?("vagrant-vbguest") then
@@ -18,19 +19,22 @@ Vagrant.configure("2") do |config|
 
     # VirtualBox specific settings
     config.vm.provider "virtualbox" do |vb|
-        # friendly name of the virtual machine
+        # user friendly name of the VM in VirtualBox
         vb.name = "Kali Linux"
 
         # Hide/show the VirtualBox GUI when booting the machine
         vb.gui = true
 
-        # Customize the amount of memory 4GB on the VM:
+        # Customize the amount of memory to 4GB on the VM:
         vb.memory = "4096"
 
-        # use max of 80% cpu
+        # use max 80% of the cpu
         vb.customize ["modifyvm", :id, "--cpuexecutioncap", "80"]
         # enable USB
         vb.customize ["modifyvm", :id, "--usb", "on"]
+        vb.customize ["modifyvm", :id, "--usbehci", "on"]
+        # enable usbfilter
+        # TBD
     end
 
     # Provision the machine with a shell script
@@ -40,7 +44,7 @@ Vagrant.configure("2") do |config|
     # SHELL
 
     config.vm.provision "ansible_local" do |ansible|
-        # set compatibility mode to 2.0 to disable warnings:
+        # set compatibility mode to ansible 2.0 to mute warnings:
         ansible.compatibility_mode = "2.0"
         ansible.playbook = "playbook.yml"
         # ansible.verbose = true

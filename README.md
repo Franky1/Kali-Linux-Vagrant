@@ -56,6 +56,8 @@ vagrant plugin install vagrant-vbguest
 ### USB Devices
 
 - <https://sonnguyen.ws/connect-usb-from-virtual-machine-using-vagrant-and-virtualbox/>
+- <https://stackoverflow.com/questions/38956127/usb-device-is-not-visible-inside-vagrant>
+- <https://stackoverflow.com/questions/22503168/vagrant-usbfilter-make-the-guest-machine-entered-an-invalid-state>
 
 ```shell
 VBoxManage.exe list usbhost
@@ -70,34 +72,27 @@ USB version/speed: 2/High
 Manufacturer: Chicony Electronics Co., Ltd
 Address: {36fc9e60-c465-11cf-8056-444553540000}\0008
 Current State: Busy
-
-UUID: dec2a0f4-33db-4a42-9af7-ee7beb034c77
-VendorId: 0x13d3 (13D3)
-ProductId: 0x3362 (3362)
-Revision: 0.1 (0001)
-Port: 0
-USB version/speed: 1/Full
-Manufacturer: Atheros Communications
-Product: Bluetooth USB Host Controller
-SerialNumber: Alaska Day 2006
-Address: {e0cbf06c-cd8b-4647-bb8a-263b43f0f974}\0000
-Current State: Busy
-
-UUID: 2f9068df-3345-477b-8de9-d0272bbbaf15
-VendorId: 0x1a86 (1A86)
-ProductId: 0x7523 (7523)
-Revision: 2.84 (0284)
-Port: 0
-USB version/speed: 1/Full
-Manufacturer: QinHeng Electronics
-Product: USB2.0-Serial
-Address: {4d36e978-e325-11ce-bfc1-08002be10318}\0001
-Current State: Busy
 ```
 
 ```ruby
 vb.customize ["modifyvm", :id, "--usb", "on"]
 vb.customize ['usbfilter', 'add', '0', '--target', :id, '--name', 'ESP', '--vendorid', '0x1a86', '--productid', '0x7523']
+```
+
+```ruby
+# Enable USB Controller on VirtualBox
+config.vm.provider "virtualbox" do |vb|
+  vb.customize ["modifyvm", :id, "--usb", "on"]
+  vb.customize ["modifyvm", :id, "--usbehci", "on"]
+end
+
+# Implement determined configuration attributes
+config.vm.provider "virtualbox" do |vb|
+  vb.customize ["usbfilter", "add", "0",
+      "--target", :id,
+      "--name", "Any Cruzer Glide",
+      "--product", "Cruzer Glide"]
+end
 ```
 
 ## ToDo
