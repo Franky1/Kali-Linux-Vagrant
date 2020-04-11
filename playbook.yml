@@ -25,13 +25,13 @@
       upgrade: dist
       cache_valid_time: 86400  # One day in seconds
 
-  - name: Install missing packages
+  - name: Install probably missing packages
     apt:
       pkg:
         - zsh
         - htop
         - git
-        - realtek-rtl88xxau-dkms
+        - realtek-rtl88xxau-dkms  # special driver i need
       state: latest
 
   - name: Ensure the locale {{ config_system_locale }} exists
